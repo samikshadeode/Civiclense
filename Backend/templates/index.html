@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="hero">
+  
+  <h1>CivicLens</h1>
+  <p>Report road hazards. Help your community stay safe.</p>
+
+  {% if session.user_id %}
+
+
+  <form action="{{ url_for('upload_page') }}" method="POST" enctype="multipart/form-data">
+    <label for="image-input" class="btn-secondary" style="display:inline-block; cursor:pointer;">
+        📷 Choose or Take Photo
+    </label>
+    <input type="file" name="image" id="image-input" accept="image/*" capture="environment" required
+           style="display:none;">
+
+    <div id="file-name" style="margin-top:8px; font-size:0.9em;"></div>
+
+    <input type="hidden" name="lat" id="lat">
+    <input type="hidden" name="lng" id="lng">
+    <button type="submit" class="btn-primary" id="submitBtn" disabled>Report an Issue</button>
+  </form>
+  {% else %}
+  <a href="{{ url_for('login') }}" class="btn-primary">Login to Report an Issue</a>
+  {% endif %}
+</section>
+
+<script>
+if (document.getElementById('lat')) {
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            document.getElementById('lat').value = pos.coords.latitude;
+            document.getElementById('lng').value = pos.coords.longitude;
+            document.getElementById('submitBtn').disabled = false;
+        },
+        err => {
+            document.getElementById('lat').value = 0;
+            document.getElementById('lng').value = 0;
+            document.getElementById('submitBtn').disabled = false;
+        }
+    );
+} else {
+    document.getElementById('submitBtn').disabled = false; // fallback if lat field doesn't exist for some reason
+}
+</script>
+
+<script>
+document.getElementById('image-input').addEventListener('change', function() {
+    document.getElementById('file-name').textContent = this.files[0]?.name || '';
+});
+</script>
+
+<section class="top-priority">
+  <h2>Top Priority Issues</h2>
+  <div class="report-list">
+    {% for report in top_reports %}
+    <div class="report-card">
+      <img src="{{ url_for('static', filename=report.image_url) }}" alt="{{ report.category }}">
+      <div class="report-info">
+        <span class="badge {{ report.severity }}">{{ report.category }} — {{ report.severity }}</span>
+        <p>{{ report.upvotes }} upvotes</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <a href="{{ url_for('all_reports') }}" class="btn-secondary">View All Reports</a>
+</section>
+
+
+<section class="nearby">
+  <h2>Nearby Incidents</h2>
+  <p>See what's been reported around you.</p>
+  <a href="{{ url_for('nearby') }}" class="btn-secondary">View Map</a>
+</section>
+{% endblock %}

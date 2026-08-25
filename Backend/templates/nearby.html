@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="nearby-page">
+    <h1>Nearby Incidents</h1>
+    <p>See what's been reported in your area.</p>
+
+    <div id="map"></div>
+</section>
+
+<!-- Leaflet library -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+    #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 8px;
+    }
+</style>
+
+<script>
+    // create the map with a default starting view, add the visual tile layer
+    const map = L.map('map').setView([18.5204, 73.8567], 12); // default: Pune
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // helper: fetch reports for given coords and plot them on the map
+    function loadReports(lat, lon) {
+        fetch(`/map_data?lat=${lat}&lon=${lon}`)
+            .then(res => res.json())
+            .then(reports => {
+                reports.forEach(report => {
+                    if (report.lat == null || report.lon == null) return; // skip bad data
+
+                    const marker = L.marker([report.lat, report.lon]).addTo(map);
+
+                    marker.bindPopup(`
+                        <strong>${report.category}</strong><br>
+                        Status: ${report.status}<br>
+                        👍 ${report.upvotes} upvotes
+                    `);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load report data:', err);
+            });
+    }
+
+    // try to get the user's real location, re-center the map, then load reports
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                const userLat = pos.coords.latitude;
+                const userLon = pos.coords.longitude;
+                map.setView([userLat, userLon], 14);
+                loadReports(userLat, userLon);
+            },
+            err => {
+                console.warn('Location access denied, using default view');
+                loadReports(18.5204, 73.8567); // fallback: default Pune coords
+            }
+        );
+    } else {
+        // browser doesn't support geolocation at all
+        loadReports(18.5204, 73.8567);
+    }
+</script>
+
+{% endblock %}

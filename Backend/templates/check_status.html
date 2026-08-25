@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="status-check">
+  <h1>Check Report Status</h1>
+  <p>Enter your report ID to check its current status.</p>
+
+  <form action="/check_status" method="GET" class="status-form">
+    <input type="text" name="report_id" placeholder="e.g. 42" required>
+    <button type="submit" class="btn-primary">Check Status</button>
+  </form>
+
+  {% if report %}
+    <div class="report-card status-result">
+      <img src="{{ url_for('static', filename=report.image_url) }}" alt="{{ report.category }}">
+      <div class="report-info">
+        <h3>Report #{{ report.id }}</h3>
+        <span class="badge {{ report.severity }}">{{ report.category }} — {{ report.severity }}</span>
+        <p>Status: <strong class="status-{{ report.status }}">{{ report.status }}</strong></p>
+        <p>{{ report.upvotes }} upvotes</p>
+        <p>Reported on: {{ report.timestamp }}</p>
+      </div>
+    </div>
+  {% elif searched %}
+    <p class="not-found">No report found with that ID. Please double-check and try again.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

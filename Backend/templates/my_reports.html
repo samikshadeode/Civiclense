@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="my-reports-page">
+  <h1>My Reports</h1>
+
+  {% if reports %}
+    <div class="report-list">
+      {% for report in reports %}
+      <div class="report-card">
+        <img src="{{ url_for('static', filename=report.image_url) }}" alt="{{ report.category }}">
+        <div class="report-info">
+          <span class="badge {{ report.severity }}">{{ report.category }} — {{ report.severity }}</span>
+          <p>Status: <strong>{{ report.status }}</strong></p>
+          <p>{{ report.upvotes }} upvotes</p>
+          <p class="report-date">Reported on: {{ report.created_at }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>You haven't reported anything yet. <a href="/">Go report your first issue</a></p>
+  {% endif %}
+
+</section>
+
+{% endblock %}

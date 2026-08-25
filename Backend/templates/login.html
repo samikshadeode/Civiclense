@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p class="auth-subtitle">Log in to continue reporting road issues</p>
+
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+            </div>
+            <div class="mb-3">
+                <input class="form-control" name="password" placeholder="Password" type="password">
+            </div>
+            <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+
+        <p class="auth-footer">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+    </div>
+</div>
+
+<style>
+    .auth-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 20px;
+    }
+
+    .auth-card {
+        background: white;
+        padding: 40px 36px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+    }
+
+    .auth-card h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #1e1b4b;
+        margin-bottom: 6px;
+    }
+
+    .auth-subtitle {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+    }
+
+    .mb-3 {
+        margin-bottom: 16px;
+        text-align: left;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #4f46e5;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #4f46e5, #06b6d4);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+    }
+
+    .auth-footer {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .auth-footer a {
+        color: #4f46e5;
+        font-weight: 600;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}

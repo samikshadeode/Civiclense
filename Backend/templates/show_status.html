@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<p class="status">
+    Status: 
+    {% if report.status == 'Resolved' %}
+        <span class="badge-success">Resolved</span>
+    {% else %}
+        <span class="badge-warning">Not Resolved</span>
+    {% endif %}
+</p>
+
+{% endblock %}
+
