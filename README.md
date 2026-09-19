@@ -15,7 +15,7 @@ https://youtu.be/9nKBa-5cjbk
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
 - [Note on the dataset](#note-on-the-dataset)
-- [Roadmap](#roadmap)
+
 
 ---
 
