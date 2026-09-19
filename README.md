@@ -78,12 +78,5 @@ CivicLense/
 
 ---
 
-## Roadmap
-
-- [ ] Duplicate/cluster detection for reports near the same location
-- [ ] Admin analytics dashboard (hazard trends by area, category, and time)
-- [ ] Confidence scores shown alongside ML predictions for admin review
-
-
 
 
