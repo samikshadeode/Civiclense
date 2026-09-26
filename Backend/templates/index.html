@@ -57,7 +57,7 @@ document.getElementById('image-input').addEventListener('change', function() {
   <div class="report-list">
     {% for report in top_reports %}
     <div class="report-card">
-      <img src="{{ url_for('static', filename=report.image_url) }}" alt="{{ report.category }}">
+      <img src="{{ url_for('static', filename= 'uploads/'+report.image_url) }}" alt="{{ report.category }}">
       <div class="report-info">
         <span class="badge {{ report.severity }}">{{ report.category }} — {{ report.severity }}</span>
         <p>{{ report.upvotes }} upvotes</p>

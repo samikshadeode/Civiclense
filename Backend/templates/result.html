@@ -1,22 +1,32 @@
 {% extends "layout.html" %}
-
 {% block content %}
-<div class="container mt-4">
-    <h2>Detection Result</h2>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h5>Original Image</h5>
-            <img src="{{ url_for('static', filename='uploads/' + original_image) }}"
-                 class="img-fluid" alt="Original upload">
-        </div>
-        <div class="col-md-6">
-            <h5>Annotated Image</h5>
-            <img src="{{ url_for('static', filename='uploads/' + annotated_image) }}"
-                 class="img-fluid" alt="Detected issues">
-        </div>
+<section class="result-page">
+  <h1>Report Submitted</h1>
+
+  {% if is_duplicate %}
+    <div class="duplicate-notice">
+      ⚠️ A similar report already exists nearby (Report #{{ duplicate_report_id }}). 
+      Your report has still been recorded, but consider upvoting the existing one to help prioritize it.
+    </div>
+  {% endif %}
+
+  <div class="result-images">
+    <div class="result-image-block">
+      <h3>Original Photo</h3>
+      <img src="{{ url_for('static', filename='uploads/' + original_image) }}" alt="Original upload">
     </div>
 
-    <a href="{{ url_for('upload_page') }}" class="btn btn-primary mt-3">Upload Another</a>
-</div>
+    <div class="result-image-block">
+      <h3>Detected Issues</h3>
+      <img src="{{ url_for('static', filename='uploads/' + annotated_image) }}" alt="Annotated detection">
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <a href="/" class="btn-primary">Back to Home</a>
+    <a href="{{ url_for('all_reports') }}" class="btn-secondary">View All Reports</a>
+  </div>
+</section>
+
 {% endblock %}

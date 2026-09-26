@@ -1,21 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>Community Reports</h2>
+<h2>Community Reports</h2>
 
-    {% for report in reports %}
-    <div class="report-card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
-        <p><strong>Report #{{ report.report_id }}</strong> — {{ report.category }}</p>
-        <p>Status: {{ report.status }}</p>
+<div class="report-list-vertical">
+  {% for report in reports %}
+  <div class="report-card">
+    {% if report.image_url %}
+      <img src="{{ url_for('static', filename='uploads/'+ report.image_url) }}" alt="{{ report.category }}">
+    {% endif %}
+    <div class="report-info">
+      <p><strong>Report #{{ report.report_id }}</strong> — {{ report.category }}</p>
+      <p>Status: {{ report.status }}</p>
 
-        {% if report.image_path %}
-            <img src="{{ url_for('static', filename=report.image_path) }}" width="250">
-        {% endif %}
-
-        <form method="POST" action="/upvote" style="display:inline;">
-            <input type="hidden" name="report_id" value="{{ report.report_id }}">
-            <button type="submit">👍 Upvote ({{ report.upvotes }})</button>
-        </form>
+      <form method="POST" action="/upvote" class="upvote-form">
+        <input type="hidden" name="report_id" value="{{ report.report_id }}">
+        <button type="submit" class="status-update-btn">👍 Upvote ({{ report.upvotes }})</button>
+      </form>
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

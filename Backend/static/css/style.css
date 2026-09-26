@@ -141,17 +141,18 @@ section h2 {
 }
 
 /* Report list */
-.report-list {
-    display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    padding: 4px 4px 12px;
+.report-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 4px;
 }
 .report-card {
     background: white;
     border-radius: 16px;
     overflow: hidden;
     min-width: 230px;
+    max-width: 500px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.07);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     border: 1px solid rgba(0,0,0,0.04);
@@ -256,4 +257,83 @@ section h2 {
 .nav-greeting {
     font-size: 14px;
     color: #555;
+}
+
+.status-update-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.status-select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.status-update-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.status-update-btn:hover {
+  background: #1d4ed8;
+}
+
+.status-update-btn:active {
+  transform: scale(0.97);
+}
+
+.duplicate-notice {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+.result-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.result-images {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.result-image-block {
+  flex: 1;
+  min-width: 250px;
+}
+
+.result-image-block img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
 }

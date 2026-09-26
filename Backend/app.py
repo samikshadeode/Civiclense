@@ -78,7 +78,7 @@ def upload_page():
     file.save(file_path)
 
     # Run inference
-    results = model.predict(source=file_path, save=False)
+    results = model.predict(source=file_path, save=False,conf=0.15)
     boxes = results[0].boxes
 
     # Determine category (first detected class) and severity
@@ -100,17 +100,32 @@ def upload_page():
     lat = request.form.get("lat")
     lng = request.form.get("lng")
 
+     # Check for a nearby duplicate report (same category, close location, not yet resolved)
+    duplicate = db.execute("""
+    SELECT * FROM reports 
+    WHERE category = ? 
+    AND ABS(lat - ?) < 0.001 
+    AND ABS(lon - ?) < 0.001
+    AND status != 'resolved'
+""", category, lat, lng)
+
+    is_duplicate = len(duplicate) > 0 
+
     # Save report to database
     db.execute(
     """INSERT INTO reports 
-       (user_id, image_url, category, severity, lat, lon, status, upvotes, created_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-    session["user_id"], "uploads/" + annotated_filename, category, severity,
-    lat, lng, "pending", 0, datetime.now().isoformat()
+       (user_id, image_url, category, severity, lat, lon, status, upvotes, created_at, is_duplicate) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+    session["user_id"], annotated_filename, category, severity,
+    lat, lng, "pending", 0, datetime.now().isoformat(), int(is_duplicate)
 )
 
-    return render_template("result.html", original_image=unique_filename, annotated_image=annotated_filename)
-
+    return render_template("result.html", 
+    original_image=unique_filename, 
+    annotated_image=annotated_filename,
+    is_duplicate=is_duplicate,
+    duplicate_report_id=duplicate[0]["report_id"] if is_duplicate else None
+)
 
 def estimate_severity(boxes, img_shape):
     if len(boxes) == 0:
@@ -242,7 +257,20 @@ def admin_reports():
     if len(user) == 0 or not user[0]["is_admin"]:
         return apology("Admins only", 403)
 
-    reports = db.execute("SELECT * FROM reports WHERE status != 'resolved' ORDER BY report_id DESC")
+   
+    reports = db.execute("""
+        SELECT *, 
+        (CASE severity 
+            WHEN 'severe' THEN 3 
+            WHEN 'moderate' THEN 2 
+            WHEN 'minor' THEN 1 
+            ELSE 0 
+        END) * (1 + upvotes) AS priority_score
+        FROM reports 
+        WHERE status != 'resolved' 
+        ORDER BY priority_score DESC
+    """)
+    print("DEBUG:", reports)
     return render_template("admin_reports.html", reports=reports)
 
 
@@ -319,5 +347,5 @@ def my_reports():
     return render_template("my_reports.html", reports=reports)
 
 if __name__ == "__main__":
-    app.run(debug=True,port=5070) 
+    app.run(debug=True,port=5083) 
  
