@@ -5,7 +5,7 @@
 CivicLens lets citizens report road hazards -potholes, damaged signage, flooding, broken streetlights — by simply snapping a photo. An ML model automatically classifies each hazard's category and severity, so reports are triaged and prioritized without waiting on manual review. Local admins then track and resolve issues through a dedicated dashboard.
 
 #DEMO VIDEO
-https://youtu.be/9nKBa-5cjbk
+[https://youtu.be/9nKBa-5cjbk](https://youtu.be/z2wKUjDfMz4)
 ---
 
 ## Table of contents
